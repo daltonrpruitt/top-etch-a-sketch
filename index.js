@@ -53,8 +53,35 @@ function createGrid(size) {
 
 createGrid(16, 16);
 
+function rgbToArray(rgb) {
+    return rgb.split("(")[1].split(")")[0].split(",").map(i=>parseInt(i));
+}
+
+function arrayToRgb(array) {
+    return "rgb(" + array[0] + "," + array[1] + "," + array[2] + ")";
+}
+
+
+
 function changeColor(event) {
     console.log(event.target.id);
-    event.target.classList.toggle("colored-in");
+    // event.target.classList.toggle("colored-in");
+    // let computedStyle = window.getComputedStyle(event.target, null);
+    let currentColor = event.target.style.backgroundColor; //computedStyle.getPropertyValue('background-color');
+    if(currentColor == "") {
+        currentColor = arrayToRgb([255,255,255]);
+    } else if (rgbToArray(currentColor)[0] == 0) {
+        event.target.style.backgroundColor = arrayToRgb([255,255,255]);
+        return;
+    }
+    
+        const darkenFactor = -255/9;
+    let newColorArray = rgbToArray(currentColor).map(i=>Math.round((i+darkenFactor)));
+    console.log(newColorArray[0]);
+    if(newColorArray[0] < 0) { newColorArray = [0,0,0]; }
+    console.log(newColorArray[0]);
+    let newColorRgb = arrayToRgb(newColorArray); 
+    
+    event.target.style.backgroundColor = newColorRgb;
 }
 
